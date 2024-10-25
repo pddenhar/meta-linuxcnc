@@ -1,0 +1,38 @@
+From c5a901ed533367588e53ee9fdd7db61a64ef755f Mon Sep 17 00:00:00 2001
+From: Peter Den Hartog <pdenhartog@tormach.com>
+Date: Fri, 25 Oct 2024 00:05:55 -0600
+Subject: [PATCH] configure.ac: Check PATH for TCLCONFIG as well as lib
+ directories
+
+---
+ configure.ac | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 1e1f2c31d9..c49e7a0574 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1321,6 +1321,11 @@ AC_ARG_WITH(tclConfig,
+         TCLCONFIG=
+     ])
+ 
++AC_PATH_PROG(TCLCONFIG, tclConfig.sh)
++if test -z "$TCLCONFIG"; then
++  AC_MSG_WARN([Did not find tclConfig.sh on PATH])
++fi
++
+ # if not specified, search for tclConfig.sh
+ if (test "x$TCLCONFIG" = "x"); then
+     TCLCONFIG=$(find /usr/lib* -maxdepth 2 -name tclConfig.sh | sort -r | head -n1)
+@@ -1356,6 +1361,11 @@ AC_ARG_WITH(tkConfig,
+         TKCONFIG=
+     ])
+ 
++AC_PATH_PROG(TKCONFIG, tkConfig.sh)
++if test -z "$TKCONFIG"; then
++  AC_MSG_WARN([Did not find tkConfig.sh on PATH])
++fi
++
+ # if not specified, search for tclConfig.sh
+ if test -z "$TKCONFIG"; then
+     TKCONFIG=$(dirname $TCLCONFIG)/tkConfig.sh
