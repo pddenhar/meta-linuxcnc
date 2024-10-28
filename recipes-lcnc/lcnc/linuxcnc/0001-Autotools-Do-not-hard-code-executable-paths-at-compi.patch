@@ -1,0 +1,126 @@
+From 4810426429c2b3d785d1de000e0a8dc4a8914851 Mon Sep 17 00:00:00 2001
+From: Peter Den Hartog <pdenhartog@tormach.com>
+Date: Mon, 28 Oct 2024 15:54:17 -0700
+Subject: [PATCH] Autotools: Do not hard code executable paths at compile time.
+ Just use what's in PATH
+
+---
+ scripts/linuxcnc.in      | 14 ++++++++------
+ scripts/linuxcnc_info.in |  2 +-
+ scripts/linuxcnc_var.in  |  7 +++++--
+ scripts/realtime.in      |  8 +++++---
+ src/Makefile.modinc.in   |  2 +-
+ 5 files changed, 20 insertions(+), 13 deletions(-)
+
+diff --git a/scripts/linuxcnc.in b/scripts/linuxcnc.in
+index da800284e0..680db7e0fb 100644
+--- a/scripts/linuxcnc.in
++++ b/scripts/linuxcnc.in
+@@ -37,12 +37,14 @@ fi
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ 
+-PIDOF="@PIDOF@ -x"
+-PS=@PS@
+-AWK=@AWK@
+-GREP=@GREP@
+-IPCS=@IPCS@
+-KILL=@KILL@
++# It doesn't make sense to hard code executable paths at compile time.
++# Either they exist in the env at run time or they don't
++PIDOF="pidof -x"
++PS="ps"
++AWK="awk"
++GREP="grep"
++IPCS="ipcs"
++KILL="kill"
+ 
+ LINUXCNC_HOME=@EMC2_HOME@; export LINUXCNC_HOME
+ 
+diff --git a/scripts/linuxcnc_info.in b/scripts/linuxcnc_info.in
+index 668634114a..9fdfc30a33 100755
+--- a/scripts/linuxcnc_info.in
++++ b/scripts/linuxcnc_info.in
+@@ -152,7 +152,7 @@ show "          serial" $(cat /proc/ioports|grep serial)
+ echo
+ echo "Versions:"
+ show "             gcc" $(gcc --version|head -1)
+-show "          python" $(@PYTHON@ --version 2>&1)
++show "          python" $(python3 --version 2>&1)
+ show "             git" $(tryversion git)
+ show "      git commit" $(git_commit)
+ show "             tcl" $(echo "puts $::tcl_version"|tclsh)
+diff --git a/scripts/linuxcnc_var.in b/scripts/linuxcnc_var.in
+index 3217a459d4..f57f9c351a 100644
+--- a/scripts/linuxcnc_var.in
++++ b/scripts/linuxcnc_var.in
+@@ -20,6 +20,9 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++
++PYTHON=$(which python3)
++
+ function usage () {
+   cat <<EOF
+ 
+@@ -48,7 +51,7 @@ LINUXCNC_AUX_EXAMPLES=@LINUXCNC_AUX_EXAMPLES@
+ REALTIME=@REALTIME@
+ RTS=@RTS@
+ HALLIB_DIR=@HALLIB_DIR@
+-PYTHON=@PYTHON@"
++PYTHON=${PYTHON}"
+ }
+ 
+ function show_item () {
+@@ -59,7 +62,7 @@ function show_item () {
+     REALTIME) echo @REALTIME@;;
+     RTS) echo @RTS@;;
+     HALLIB_DIR) echo @HALLIB_DIR@;;
+-    PYTHON) echo @PYTHON@;;
++    PYTHON) echo $PYTHON;;
+     all) show_all;;
+     *) echo UNKNOWN; exit 1;;
+   esac
+diff --git a/scripts/realtime.in b/scripts/realtime.in
+index 5de3486f17..2f7513aee5 100644
+--- a/scripts/realtime.in
++++ b/scripts/realtime.in
+@@ -19,8 +19,10 @@
+ 
+ export LANG=C
+ 
+-GREP=@GREP@
+-PS=@PS@
++# Hard coding these at compile time makes no sense
++# Either they're in the PATH or not
++GREP="grep"
++PS="ps"
+ 
+ CheckKernel() {
+     case "@KERNEL_VERS@" in
+@@ -72,7 +74,7 @@ CheckConfig(){
+     INSMOD="@INSMOD@"
+     RMMOD="@RMMOD@"
+     LSMOD="@LSMOD@"
+-    FUSER="@FUSER@"
++    FUSER="fuser"
+ 
+     # Import the config
+     source $RTAPICONF
+diff --git a/src/Makefile.modinc.in b/src/Makefile.modinc.in
+index e042a81bf6..ec49a767e1 100644
+--- a/src/Makefile.modinc.in
++++ b/src/Makefile.modinc.in
+@@ -66,7 +66,7 @@ KERNELDIR := @KERNELDIR@
+ CC := @CC@
+ RTAI = @RTAI@
+ RTFLAGS = $(filter-out -ffast-math,@RTFLAGS@ @EXT_RTFLAGS@) -fno-fast-math $(call cc-option,-mieee-fp) -fno-unsafe-math-optimizations
+-RTFLAGS := -Os -g -I. -I@RTDIR@/include $(RTFLAGS) -DRTAPI -D_GNU_SOURCE -Drealtime
++RTFLAGS := -Os -g -I. $(RTFLAGS) -DRTAPI -D_GNU_SOURCE -Drealtime
+ ifneq ($(KERNELRELEASE),)
+ ifeq ($(RTARCH):$(RTAI):$(filter $(RTFLAGS),-msse),x86_64:3:)
+ EXTRA_CFLAGS += -msse
+-- 
+2.34.1
+

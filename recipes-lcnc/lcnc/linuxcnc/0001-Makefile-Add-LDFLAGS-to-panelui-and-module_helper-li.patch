@@ -1,0 +1,37 @@
+From 3eada2572f113d39464dfe5539cf35948d76da0f Mon Sep 17 00:00:00 2001
+From: Peter Den Hartog <pdenhartog@tormach.com>
+Date: Mon, 28 Oct 2024 13:24:51 -0700
+Subject: [PATCH] Makefile: Add LDFLAGS to panelui and module_helper linker
+ steps
+
+---
+ src/hal/components/Submakefile | 2 +-
+ src/module_helper/Submakefile  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/hal/components/Submakefile b/src/hal/components/Submakefile
+index d49398e1a8..25091e76f3 100644
+--- a/src/hal/components/Submakefile
++++ b/src/hal/components/Submakefile
+@@ -104,7 +104,7 @@ PYFLAGS := $(PYTHON_EXTRA_LDFLAGS) $(BOOST_PYTHON_LIB) $(PYTHON_LIBS) $(PYTHON_E
+ 
+ ../bin/panelui: $(call TOOBJS, $(PYSAMPLERSRCS)) ../lib/liblinuxcnchal.so.0
+ 	$(ECHO) Linking $(notdir $@)
+-	$(Q)$(CC) -o $@ $^ $(PYFLAGS)
++	$(Q)$(CC) $(LDFLAGS) -o $@ $^ $(PYFLAGS)
+ TARGETS += ../bin/panelui
+ 
+ hal/components/conv_float_s32.comp: hal/components/conv.comp.in hal/components/mkconv.sh hal/components/Submakefile
+diff --git a/src/module_helper/Submakefile b/src/module_helper/Submakefile
+index 145631c8bc..6800a4acef 100644
+--- a/src/module_helper/Submakefile
++++ b/src/module_helper/Submakefile
+@@ -11,7 +11,7 @@ endif
+ 
+ ../bin/linuxcnc_module_helper: $(call TOOBJS, $(MODULE_HELPERSRCS))
+ 	$(ECHO) Linking $(notdir $@)
+-	@$(CC) -o $@ $^
++	$(Q)$(CC) $(LDFLAGS) -o $@ $^
+ 
+ TARGETS += ../bin/linuxcnc_module_helper
+ endif
