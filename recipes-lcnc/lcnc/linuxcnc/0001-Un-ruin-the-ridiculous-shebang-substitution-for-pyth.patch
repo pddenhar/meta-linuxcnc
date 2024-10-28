@@ -1,0 +1,204 @@
+From 03de3ef0971efe10edddf20bba36d21c1878f126 Mon Sep 17 00:00:00 2001
+From: Peter Den Hartog <pdenhartog@tormach.com>
+Date: Fri, 25 Oct 2024 17:50:44 -0600
+Subject: [PATCH] Un-ruin the ridiculous shebang substitution for python files
+
+---
+ src/emc/ini/Submakefile                | 2 +-
+ src/emc/usr_intf/axis/Submakefile      | 2 +-
+ src/emc/usr_intf/gmoccapy/Submakefile  | 2 +-
+ src/emc/usr_intf/gremlin/Submakefile   | 2 +-
+ src/emc/usr_intf/gscreen/Submakefile   | 2 +-
+ src/emc/usr_intf/mdro/Submakefile      | 2 +-
+ src/emc/usr_intf/pncconf/Submakefile   | 2 +-
+ src/emc/usr_intf/pyui/Submakefile      | 2 +-
+ src/emc/usr_intf/qtplasmac/Submakefile | 2 +-
+ src/emc/usr_intf/qtvcp/Submakefile     | 2 +-
+ src/emc/usr_intf/stepconf/Submakefile  | 2 +-
+ src/emc/usr_intf/touchy/Submakefile    | 2 +-
+ src/hal/user_comps/Submakefile         | 2 +-
+ src/hal/user_comps/vismach/Submakefile | 2 +-
+ src/hal/utils/Submakefile              | 6 +++---
+ 15 files changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/src/emc/ini/Submakefile b/src/emc/ini/Submakefile
+index b95eb2960d..c5dedcd6a3 100644
+--- a/src/emc/ini/Submakefile
++++ b/src/emc/ini/Submakefile
+@@ -9,6 +9,6 @@ $(patsubst ./emc/ini/%,../include/%,$(wildcard ./emc/ini/*.hh)): ../include/%.hh
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+ PYTARGETS += ../bin/update_ini
+diff --git a/src/emc/usr_intf/axis/Submakefile b/src/emc/usr_intf/axis/Submakefile
+index 72e590a959..3bff36b311 100644
+--- a/src/emc/usr_intf/axis/Submakefile
++++ b/src/emc/usr_intf/axis/Submakefile
+@@ -31,7 +31,7 @@ $(PYBIN): ../bin/%: emc/usr_intf/axis/scripts/%.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+ PYI18NSRCS += $(addprefix emc/usr_intf/axis/scripts/, $(PYSCRIPTS))  \
+ 	../lib/python/propertywindow.py \
+diff --git a/src/emc/usr_intf/gmoccapy/Submakefile b/src/emc/usr_intf/gmoccapy/Submakefile
+index ad95e3f2e3..ef8d14d224 100644
+--- a/src/emc/usr_intf/gmoccapy/Submakefile
++++ b/src/emc/usr_intf/gmoccapy/Submakefile
+@@ -23,6 +23,6 @@ PYTARGETS += ../bin/gmoccapy ../lib/python/gmoccapy/__init__.py $(patsubst %,../
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+ 
+diff --git a/src/emc/usr_intf/gremlin/Submakefile b/src/emc/usr_intf/gremlin/Submakefile
+index 4315900a2e..38b9d9a356 100644
+--- a/src/emc/usr_intf/gremlin/Submakefile
++++ b/src/emc/usr_intf/gremlin/Submakefile
+@@ -17,4 +17,4 @@ PYI18NSRCS += emc/usr_intf/gremlin/gremlin.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/emc/usr_intf/gscreen/Submakefile b/src/emc/usr_intf/gscreen/Submakefile
+index 9574917e47..ff7a39405d 100644
+--- a/src/emc/usr_intf/gscreen/Submakefile
++++ b/src/emc/usr_intf/gscreen/Submakefile
+@@ -32,4 +32,4 @@ PYI18NSRCS += emc/usr_intf/gscreen/gscreen.py $(patsubst %,emc/usr_intf/gscreen/
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/emc/usr_intf/mdro/Submakefile b/src/emc/usr_intf/mdro/Submakefile
+index 372baaf186..1dfa44dccb 100644
+--- a/src/emc/usr_intf/mdro/Submakefile
++++ b/src/emc/usr_intf/mdro/Submakefile
+@@ -5,4 +5,4 @@ PYI18NSRCS += emc/usr_intf/mdro/mdro.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/emc/usr_intf/pncconf/Submakefile b/src/emc/usr_intf/pncconf/Submakefile
+index af8de8a32b..62f650a373 100644
+--- a/src/emc/usr_intf/pncconf/Submakefile
++++ b/src/emc/usr_intf/pncconf/Submakefile
+@@ -202,4 +202,4 @@ PYI18NSRCS += emc/usr_intf/pncconf/pncconf.py $(patsubst %,emc/usr_intf/pncconf/
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/emc/usr_intf/pyui/Submakefile b/src/emc/usr_intf/pyui/Submakefile
+index 5ec29761cc..d4683fe794 100644
+--- a/src/emc/usr_intf/pyui/Submakefile
++++ b/src/emc/usr_intf/pyui/Submakefile
+@@ -15,7 +15,7 @@ PYTARGETS += ../bin/pyui $(patsubst %,../lib/python/pyui/%.py,$(pyui_MODULES)) \
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+ 	$(Q)mkdir -p ../lib/python/pyui
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+ ../lib/python/pyui/panelui_spec.ini: emc/usr_intf/pyui/panelui_spec.ini
+ 	$(ECHO) Copying INI script $(notdir $@)
+diff --git a/src/emc/usr_intf/qtplasmac/Submakefile b/src/emc/usr_intf/qtplasmac/Submakefile
+index f16af9cf08..3a308b3be7 100644
+--- a/src/emc/usr_intf/qtplasmac/Submakefile
++++ b/src/emc/usr_intf/qtplasmac/Submakefile
+@@ -6,4 +6,4 @@ $(QTPLASMAC_PYBIN): ../bin/%: emc/usr_intf/qtplasmac/%.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/emc/usr_intf/qtvcp/Submakefile b/src/emc/usr_intf/qtvcp/Submakefile
+index f01177350a..e074185f8b 100644
+--- a/src/emc/usr_intf/qtvcp/Submakefile
++++ b/src/emc/usr_intf/qtvcp/Submakefile
+@@ -3,4 +3,4 @@ PYTARGETS += ../bin/qtvcp
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/emc/usr_intf/stepconf/Submakefile b/src/emc/usr_intf/stepconf/Submakefile
+index 1f5ccb1916..6cb72583eb 100644
+--- a/src/emc/usr_intf/stepconf/Submakefile
++++ b/src/emc/usr_intf/stepconf/Submakefile
+@@ -50,4 +50,4 @@ PYI18NSRCS += emc/usr_intf/stepconf/stepconf.py $(patsubst %,emc/usr_intf/stepco
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/emc/usr_intf/touchy/Submakefile b/src/emc/usr_intf/touchy/Submakefile
+index 5acb34d29b..1c34391155 100644
+--- a/src/emc/usr_intf/touchy/Submakefile
++++ b/src/emc/usr_intf/touchy/Submakefile
+@@ -25,4 +25,4 @@ PYI18NSRCS += emc/usr_intf/touchy/touchy.py $(patsubst %,emc/usr_intf/touchy/%.p
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+diff --git a/src/hal/user_comps/Submakefile b/src/hal/user_comps/Submakefile
+index ab5b64f20f..13cb2c7868 100644
+--- a/src/hal/user_comps/Submakefile
++++ b/src/hal/user_comps/Submakefile
+@@ -11,7 +11,7 @@ $(patsubst %, ../bin/%, $(USER_COMP_PY)) : ../bin/%: hal/user_comps/%.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+ PYTARGETS += $(patsubst %, ../bin/%, $(USER_COMP_PY))
+ 
+diff --git a/src/hal/user_comps/vismach/Submakefile b/src/hal/user_comps/vismach/Submakefile
+index c36c78a0ce..25329c3175 100644
+--- a/src/hal/user_comps/vismach/Submakefile
++++ b/src/hal/user_comps/vismach/Submakefile
+@@ -25,5 +25,5 @@ $(VISMACH_PYBIN): ../bin/%: hal/user_comps/vismach/%.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+diff --git a/src/hal/utils/Submakefile b/src/hal/utils/Submakefile
+index 1ec91b283e..7bc8141e6e 100644
+--- a/src/hal/utils/Submakefile
++++ b/src/hal/utils/Submakefile
+@@ -88,19 +88,19 @@ endif
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+ ../bin/elbpcom: ../bin/%: hal/utils/%.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ 
+ ../bin/modcompile: ../bin/%: hal/drivers/mesa-hostmot2/modbus/%.py
+ 	@$(ECHO) Syntax checking python script $(notdir $@)
+ 	$(Q)$(PYTHON) -m py_compile $<
+ 	$(ECHO) Copying python script $(notdir $@)
+-	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
++	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
+ ../share/linuxcnc/mesa_modbus.c.tmpl: hal/drivers/mesa-hostmot2/modbus/mesa_modbus.c.tmpl
+ 	$(ECHO) Copying Modbus template $(notdir $@)
+ 	$(Q)cp -f $< $@
