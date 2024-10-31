@@ -8,6 +8,7 @@ SRC_URI = "git://github.com/LinuxCNC/linuxcnc.git;protocol=https;branch=master \
            file://0001-Makefile-Patch-to-use-usr-bin-env-for-Python-and-TCL.patch;patchdir=.. \
            file://0001-Makefile-Add-LDFLAGS-to-panelui-and-module_helper-li.patch;patchdir=.. \
            file://0001-Autotools-Do-not-hard-code-executable-paths-at-compi.patch;patchdir=.. \
+           file://use-standard-sitepy.patch \
            "
 
 inherit autotools-brokensep pkgconfig systemd python3native
@@ -26,7 +27,8 @@ asciidoc-native groff-native"
 # tk provides wish, tk-lib provides libtk8.6.so
 RDEPENDS:${PN} += "tcl tk tk-lib python3-core bash grep"
 
-EXTRA_OECONF += "--without-libmodbus --disable-check-runtime-deps --disable-gtk --disable-tkinter --with-boost-python=boost_python312"
+# Include --disable-gtk here if you don't want things that depend on gtk3
+EXTRA_OECONF += "--without-libmodbus --disable-check-runtime-deps --disable-tkinter --with-boost-python=boost_python312"
 
 CONFIGUREOPTS:remove = "--disable-dependency-tracking"
 CONFIGUREOPTS:remove = "--disable-silent-rules"
@@ -43,9 +45,7 @@ INSANE_SKIP:${PN}-dbg += "buildpaths"
 CLEANBROKEN = "1"
 
 # Configure some extra packaged files for the base package
-FILES:${PN}:append = " ${libdir}/${PYTHON_PN}/dist-packages/* "
-# This one would maybe be better done as ${libdir}/${PYTHON_DIR}/dist-packages/
-# but automake isn't getting the path right 
+FILES:${PN}:append = " ${PYTHON_SITEPACKAGES_DIR}/* "
 
 # Get rid of the files we don't want to package
 do_install:append() { 
@@ -56,7 +56,5 @@ do_install:append() {
     rm -rf ${D}${datadir}/glade/
     rm -rf ${D}${datadir}/qtvcp/
     rm -rf ${D}${datadir}/gmoccapy/
-
-
 }
 

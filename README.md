@@ -5,23 +5,16 @@ Please see the corresponding sections below for details.
 Dependencies
 ============
 
-  URI: <first dependency>
-  branch: <branch name>
+  URI: https://github.com/pddenhar/meta-python3-yapps2
+  branch: master
 
-  URI: <second dependency>
-  branch: <branch name>
-
-  .
-  .
-  .
 
 Patches
 =======
 
-Please submit any patches against the meta-linuxcnc layer to the xxxx mailing list (xxxx@zzzz.org)
-and cc: the maintainer:
+Please submit any patches against the meta-linuxcnc layer as a pull request on GitHub
 
-Maintainer: XXX YYYYYY <xxx.yyyyyy@zzzzz.com>
+Maintainer: Peter Den Hartog <pdenhartog@tormach.com>
 
 Table of Contents
 =================
@@ -33,7 +26,10 @@ Table of Contents
 I. Adding the meta-linuxcnc layer to your build
 =================================================
 
-Run 'bitbake-layers add-layer meta-linuxcnc'
+```
+git clone git@github.com:pddenhar/meta-linuxcnc.git
+bitbake-layers add-layer meta-linuxcnc
+```
 
 II. Misc
 ========
