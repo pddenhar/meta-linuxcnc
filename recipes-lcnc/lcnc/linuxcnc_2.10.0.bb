@@ -1,5 +1,5 @@
 LICENSE = "GPL-2.0-only"
-LIC_FILES_CHKSUM = "file://${WORKDIR}/git/COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
+LIC_FILES_CHKSUM = "file://../COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 SRC_URI = "git://github.com/LinuxCNC/linuxcnc.git;protocol=https;branch=master \
            file://0002-configure.ac-Add-BUILD_TKINTER-flag.patch \
@@ -24,8 +24,9 @@ boost boost-native python3 python3-native tcl tcl-native tk xinerama readline li
 asciidoc-native groff-native" 
 # These ones were missing from configure.ac checks
 
-# tk provides wish, tk-lib provides libtk8.6.so
-RDEPENDS:${PN} += "tcl tk tk-lib python3-core bash grep bwidget"
+# tk rprovides wish, tk-lib provides libtk8.6.so
+# libgl-mesa rprovides libgl
+RDEPENDS:${PN} += "tcl tk tk-lib python3-core bash grep bwidget libgl python3-pygobject python3-pyopengl libglu"
 
 # Include --disable-gtk here if you don't want things that depend on gtk3
 EXTRA_OECONF += "--without-libmodbus --disable-check-runtime-deps --disable-tkinter --with-boost-python=boost_python312"
