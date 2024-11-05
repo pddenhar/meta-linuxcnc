@@ -25,7 +25,7 @@ asciidoc-native groff-native"
 # These ones were missing from configure.ac checks
 
 # tk provides wish, tk-lib provides libtk8.6.so
-RDEPENDS:${PN} += "tcl tk tk-lib python3-core bash grep"
+RDEPENDS:${PN} += "tcl tk tk-lib python3-core bash grep bwidget"
 
 # Include --disable-gtk here if you don't want things that depend on gtk3
 EXTRA_OECONF += "--without-libmodbus --disable-check-runtime-deps --disable-tkinter --with-boost-python=boost_python312"
@@ -45,16 +45,14 @@ INSANE_SKIP:${PN}-dbg += "buildpaths"
 CLEANBROKEN = "1"
 
 # Configure some extra packaged files for the base package
-FILES:${PN}:append = " ${PYTHON_SITEPACKAGES_DIR}/* "
+FILES:${PN}:append = " ${PYTHON_SITEPACKAGES_DIR}/* \
+                       ${libdir}/tcltk/* \
+                       ${datadir}/axis/* \ 
+                       ${datadir}/gtksourceview-4/* \ 
+                       ${datadir}/gscreen/* \ 
+                       ${datadir}/glade/* \ 
+                       ${datadir}/qtvcp/* \ 
+                       ${datadir}/gmoccapy/* \
+                       "
 
-# Get rid of the files we don't want to package
-do_install:append() { 
-    rm -rf ${D}${libdir}/tcltk
-    rm -rf ${D}${datadir}/gtksourceview-4
-    rm -rf ${D}${datadir}/gscreen/
-    rm -rf ${D}${datadir}/axis/
-    rm -rf ${D}${datadir}/glade/
-    rm -rf ${D}${datadir}/qtvcp/
-    rm -rf ${D}${datadir}/gmoccapy/
-}
 
