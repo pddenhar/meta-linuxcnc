@@ -11,7 +11,7 @@ S = "${WORKDIR}/git"
 
 inherit setuptools3
 
-RDEPENDS:${PN} += "python3-core python3-ctypes python3-datetime python3-logging"
+RDEPENDS:${PN} += "python3-core python3-ctypes python3-datetime python3-logging python3-numpy"
 
 # WARNING: We were unable to map the following python package/module
 # dependencies to the bitbake packages which include them:
