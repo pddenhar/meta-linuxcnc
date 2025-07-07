@@ -10,6 +10,9 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=03b36fdd84f74b8d8189a202b980b67f"
 
 DEPENDS += "ncurses"
 
+# Append this here or wcwidth function is missing (which GCC 14 complains about)
+CFLAGS:append = " -D_XOPEN_SOURCE=700"
+
 PR = "r9"
 
 SRC_URI = "${GNU_MIRROR}/readline/${BPN}-${PV}.tar.gz;name=archive \
