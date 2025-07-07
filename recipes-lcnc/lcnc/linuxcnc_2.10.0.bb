@@ -11,7 +11,7 @@ SRC_URI = "git://github.com/LinuxCNC/linuxcnc.git;protocol=https;branch=master \
            file://use-standard-sitepy.patch \
            "
 
-inherit autotools-brokensep pkgconfig systemd python3native
+inherit autotools-brokensep pkgconfig python3native
 
 # Modify these as desired
 PV = "2.10.0~pre0+git"
@@ -19,7 +19,7 @@ SRCREV = "8102217123f319c0fee7403f48448bd0844ccbcb"
 
 S = "${WORKDIR}/git/src"
 
-DEPENDS += "libtirpc systemd libusb1 glib-2.0 gtk+3 python3-yapps2-native intltool-native \
+DEPENDS += "libtirpc libusb1 glib-2.0 gtk+3 python3-yapps2-native intltool-native \
 boost boost-native python3 python3-native tcl tcl-native tk xinerama readline libglu libxmu \
 asciidoc-native groff-native" 
 # These ones were missing from configure.ac checks
