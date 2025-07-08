@@ -1,4 +1,4 @@
-From 3eada2572f113d39464dfe5539cf35948d76da0f Mon Sep 17 00:00:00 2001
+From fbd290817a3a0eff17a78b49bc48e936b7768296 Mon Sep 17 00:00:00 2001
 From: Peter Den Hartog <pdenhartog@tormach.com>
 Date: Mon, 28 Oct 2024 13:24:51 -0700
 Subject: [PATCH] Makefile: Add LDFLAGS to panelui and module_helper linker
@@ -10,10 +10,10 @@ Subject: [PATCH] Makefile: Add LDFLAGS to panelui and module_helper linker
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/hal/components/Submakefile b/src/hal/components/Submakefile
-index d49398e1a8..25091e76f3 100644
+index b54a481833..93462c1eba 100644
 --- a/src/hal/components/Submakefile
 +++ b/src/hal/components/Submakefile
-@@ -104,7 +104,7 @@ PYFLAGS := $(PYTHON_EXTRA_LDFLAGS) $(BOOST_PYTHON_LIB) $(PYTHON_LIBS) $(PYTHON_E
+@@ -107,7 +107,7 @@ PYFLAGS := $(PYTHON_EXTRA_LDFLAGS) $(BOOST_PYTHON_LIB) $(PYTHON_LIBS) $(PYTHON_E
  
  ../bin/panelui: $(call TOOBJS, $(PYSAMPLERSRCS)) ../lib/liblinuxcnchal.so.0
  	$(ECHO) Linking $(notdir $@)

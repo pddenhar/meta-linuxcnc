@@ -1,17 +1,17 @@
-From 3058cfff8a52f92e6d8563571fe3f0459f846b32 Mon Sep 17 00:00:00 2001
+From 1929c0a982ece5f61e51be0eae39d5ae2bd55820 Mon Sep 17 00:00:00 2001
 From: Peter Den Hartog <pdenhartog@tormach.com>
 Date: Fri, 25 Oct 2024 00:23:29 -0600
 Subject: [PATCH] configure.ac: Add BUILD_TKINTER flag
 
 ---
- Makefile.inc.in |  2 ++
- configure.ac    | 57 +++++++++++++++++++++++++++++++--------------
+ src/Makefile.inc.in |  2 ++
+ src/configure.ac    | 57 +++++++++++++++++++++++++++++++--------------
  2 files changed, 41 insertions(+), 18 deletions(-)
 
-diff --git a/Makefile.inc.in b/Makefile.inc.in
+diff --git a/src/Makefile.inc.in b/src/Makefile.inc.in
 index 41bc416719..624a84bef0 100644
---- a/Makefile.inc.in
-+++ b/Makefile.inc.in
+--- a/src/Makefile.inc.in
++++ b/src/Makefile.inc.in
 @@ -107,6 +107,8 @@ TK_DBGX=@TK_DBGX@
  TCL_CFLAGS=@TCL_CFLAGS@ @TK_CFLAGS@
  TCL_LIBS=@TCL_LIBS@ @TK_LIBS@ @LIBS@
@@ -21,11 +21,11 @@ index 41bc416719..624a84bef0 100644
  AR = @AR@
  ARFLAGS = cr
  CXX = @CXX@
-diff --git a/configure.ac b/configure.ac
-index c49e7a0574..91e1bcf297 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -1637,30 +1637,51 @@ then
+diff --git a/src/configure.ac b/src/configure.ac
+index 8b9e9205fe..24cde7445d 100644
+--- a/src/configure.ac
++++ b/src/configure.ac
+@@ -1618,30 +1618,51 @@ then
  fi
  AC_MSG_RESULT(OK)
  

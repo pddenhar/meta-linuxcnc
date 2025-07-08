@@ -1,26 +1,124 @@
-From 03de3ef0971efe10edddf20bba36d21c1878f126 Mon Sep 17 00:00:00 2001
+From f1524b30e8cfca87a7c73f4b07846cf106acf033 Mon Sep 17 00:00:00 2001
 From: Peter Den Hartog <pdenhartog@tormach.com>
 Date: Fri, 25 Oct 2024 17:50:44 -0600
-Subject: [PATCH] Un-ruin the ridiculous shebang substitution for python files
+Subject: [PATCH] Do not use compile time shebang substitution for python files
 
+Makefile: Patch to use /usr/bin/env for Python and TCLSh shebangs
+
+Autotools: Do not hard code executable paths at compile time. Just use what's in PATH
+
+configure.ac: Check PATH for TCLCONFIG as well as lib directories
 ---
- src/emc/ini/Submakefile                | 2 +-
- src/emc/usr_intf/axis/Submakefile      | 2 +-
- src/emc/usr_intf/gmoccapy/Submakefile  | 2 +-
- src/emc/usr_intf/gremlin/Submakefile   | 2 +-
- src/emc/usr_intf/gscreen/Submakefile   | 2 +-
- src/emc/usr_intf/mdro/Submakefile      | 2 +-
- src/emc/usr_intf/pncconf/Submakefile   | 2 +-
- src/emc/usr_intf/pyui/Submakefile      | 2 +-
- src/emc/usr_intf/qtplasmac/Submakefile | 2 +-
- src/emc/usr_intf/qtvcp/Submakefile     | 2 +-
- src/emc/usr_intf/stepconf/Submakefile  | 2 +-
- src/emc/usr_intf/touchy/Submakefile    | 2 +-
- src/hal/user_comps/Submakefile         | 2 +-
- src/hal/user_comps/vismach/Submakefile | 2 +-
- src/hal/utils/Submakefile              | 6 +++---
- 15 files changed, 17 insertions(+), 17 deletions(-)
+ src/Makefile                           | 10 +++++-----
+ src/Makefile.modinc.in                 |  2 +-
+ src/configure.ac                       | 10 ++++++++++
+ src/emc/ini/Submakefile                |  2 +-
+ src/emc/usr_intf/axis/Submakefile      |  2 +-
+ src/emc/usr_intf/gmoccapy/Submakefile  |  2 +-
+ src/emc/usr_intf/gremlin/Submakefile   |  2 +-
+ src/emc/usr_intf/gscreen/Submakefile   |  2 +-
+ src/emc/usr_intf/mdro/Submakefile      |  2 +-
+ src/emc/usr_intf/pncconf/Submakefile   |  2 +-
+ src/emc/usr_intf/pyui/Submakefile      |  2 +-
+ src/emc/usr_intf/qtplasmac/Submakefile |  2 +-
+ src/emc/usr_intf/qtvcp/Submakefile     |  2 +-
+ src/emc/usr_intf/stepconf/Submakefile  |  2 +-
+ src/emc/usr_intf/touchy/Submakefile    |  2 +-
+ src/hal/user_comps/Submakefile         |  2 +-
+ src/hal/user_comps/vismach/Submakefile |  2 +-
+ src/hal/utils/Submakefile              |  6 +++---
+ 18 files changed, 33 insertions(+), 23 deletions(-)
 
+diff --git a/src/Makefile b/src/Makefile
+index e48c746c51..c5cb17cd64 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -482,7 +482,7 @@ TARGETS += $(patsubst po/%.po, objects/%.msg, $(wildcard po/*.po))
+ TARGETS += ../bin/tooledit
+ ../bin/tooledit: Makefile
+ 	$(Q)rm -f $@
+-	$(Q)(echo "#!$(TCLSH)")>|$@
++	$(Q)(echo '#!/usr/bin/env tclsh')>|$@
+ 	$(Q)(echo "source $(EMC2_TCL_LIB_DIR)/tooledit.tcl")>>$@
+ 	$(Q)(echo "standalone_tooledit")>>$@
+ 	$(Q)chmod +x $@
+@@ -491,7 +491,7 @@ TARGETS += ../bin/tooledit
+ TARGETS += ../bin/ngcgui
+ ../bin/ngcgui: Makefile
+ 	$(Q)rm -f $@
+-	$(Q)(echo "#!$(TCLSH)")>|$@
++	$(Q)(echo '#!/usr/bin/env tclsh')>|$@
+ 	$(Q)(echo "source $(EMC2_TCL_LIB_DIR)/ngcgui.tcl")>>$@
+ 	$(Q)(echo "::ngcgui::standalone_ngcgui")>>$@
+ 	$(Q)chmod +x $@
+@@ -500,7 +500,7 @@ TARGETS += ../bin/ngcgui
+ TARGETS += ../bin/pyngcgui
+ ../bin/pyngcgui: Makefile
+ 	$(Q)rm -f $@
+-	$(Q)(echo "#!$(PYTHON)")>|$@
++	$(Q)(echo '#!/usr/bin/env python3')>|$@
+ 	$(Q)(echo "import pyngcgui")>>$@
+ 	$(Q)(echo "pyngcgui.standalone_pyngcgui()")>>$@
+ 	$(Q)chmod +x $@
+@@ -509,7 +509,7 @@ TARGETS += ../bin/pyngcgui
+ TARGETS += ../bin/gremlin_view
+ ../bin/gremlin_view: Makefile
+ 	$(Q)rm -f $@
+-	$(Q)(echo "#!$(PYTHON)")>|$@
++	$(Q)(echo '#!/usr/bin/env python3')>|$@
+ 	$(Q)(echo "import gremlin_view")>>$@
+ 	$(Q)(echo "gremlin_view.standalone_gremlin_view()")>>$@
+ 	$(Q)chmod +x $@
+@@ -518,7 +518,7 @@ TARGETS += ../bin/gremlin_view
+ TARGETS += ../bin/halshow
+ ../bin/halshow: Makefile
+ 	$(Q)rm -f $@
+-	$(Q)(echo "#!$(TCLSH)")>|$@
++	$(Q)(echo '#!/usr/bin/env tclsh')>|$@
+ 	$(Q)(echo "source $(EMC2_TCL_LIB_DIR)/bin/halshow.tcl")>>$@
+ 	$(Q)chmod +x $@
+ 
+diff --git a/src/Makefile.modinc.in b/src/Makefile.modinc.in
+index ed9d75d98c..392a30ff04 100644
+--- a/src/Makefile.modinc.in
++++ b/src/Makefile.modinc.in
+@@ -66,7 +66,7 @@ KERNELDIR := @KERNELDIR@
+ CC := @CC@
+ RTAI = @RTAI@
+ RTFLAGS = $(filter-out -ffast-math,@RTFLAGS@ @EXT_RTFLAGS@) -fno-fast-math $(call cc-option,-mieee-fp) -fno-unsafe-math-optimizations
+-RTFLAGS := -O2 -Wall -Wextra -g -I. -I@RTDIR@/include $(RTFLAGS) -DRTAPI -D_GNU_SOURCE -Drealtime
++RTFLAGS := -O2 -Wall -Wextra -g -I. $(RTFLAGS) -DRTAPI -D_GNU_SOURCE -Drealtime
+ ifneq ($(KERNELRELEASE),)
+ ifeq ($(RTARCH):$(RTAI):$(filter $(RTFLAGS),-msse),x86_64:3:)
+ EXTRA_CFLAGS += -msse
+diff --git a/src/configure.ac b/src/configure.ac
+index 24cde7445d..f99b17285f 100644
+--- a/src/configure.ac
++++ b/src/configure.ac
+@@ -1312,6 +1312,11 @@ AC_ARG_WITH(tclConfig,
+         TCLCONFIG=
+     ])
+ 
++AC_PATH_PROG(TCLCONFIG, tclConfig.sh)
++if test -z "$TCLCONFIG"; then
++  AC_MSG_WARN([Did not find tclConfig.sh on PATH])
++fi
++
+ # if not specified, search for tclConfig.sh
+ if (test "x$TCLCONFIG" = "x"); then
+     TCLCONFIG=$(find /usr/lib* -maxdepth 2 -name tclConfig.sh | sort -r | head -n1)
+@@ -1347,6 +1352,11 @@ AC_ARG_WITH(tkConfig,
+         TKCONFIG=
+     ])
+ 
++AC_PATH_PROG(TKCONFIG, tkConfig.sh)
++if test -z "$TKCONFIG"; then
++  AC_MSG_WARN([Did not find tkConfig.sh on PATH])
++fi
++
+ # if not specified, search for tclConfig.sh
+ if test -z "$TKCONFIG"; then
+     TKCONFIG=$(dirname $TCLCONFIG)/tkConfig.sh
 diff --git a/src/emc/ini/Submakefile b/src/emc/ini/Submakefile
 index b95eb2960d..c5dedcd6a3 100644
 --- a/src/emc/ini/Submakefile
@@ -152,7 +250,7 @@ index 5acb34d29b..1c34391155 100644
 -	$(Q)(echo '#!$(PYTHON)'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
 +	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
 diff --git a/src/hal/user_comps/Submakefile b/src/hal/user_comps/Submakefile
-index ab5b64f20f..13cb2c7868 100644
+index 0d036a7338..91ee61c9a1 100644
 --- a/src/hal/user_comps/Submakefile
 +++ b/src/hal/user_comps/Submakefile
 @@ -11,7 +11,7 @@ $(patsubst %, ../bin/%, $(USER_COMP_PY)) : ../bin/%: hal/user_comps/%.py
@@ -176,7 +274,7 @@ index c36c78a0ce..25329c3175 100644
 +	$(Q)(echo '#!/usr/bin/env python3'; sed '1 { /^#!/d; }' $<) > $@.tmp && chmod +x $@.tmp && mv -f $@.tmp $@
  
 diff --git a/src/hal/utils/Submakefile b/src/hal/utils/Submakefile
-index 1ec91b283e..7bc8141e6e 100644
+index 8f19c566a4..c3d950c601 100644
 --- a/src/hal/utils/Submakefile
 +++ b/src/hal/utils/Submakefile
 @@ -88,19 +88,19 @@ endif

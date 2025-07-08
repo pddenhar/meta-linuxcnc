@@ -2,39 +2,50 @@ LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://../COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 SRC_URI = "git://github.com/LinuxCNC/linuxcnc.git;protocol=https;branch=master \
-           file://0002-configure.ac-Add-BUILD_TKINTER-flag.patch \
-           file://0001-configure.ac-Check-PATH-for-TCLCONFIG-as-well-as-lib.patch \
+           file://0002-configure.ac-Add-BUILD_TKINTER-flag.patch;patchdir=.. \
            file://0001-Un-ruin-the-ridiculous-shebang-substitution-for-pyth.patch;patchdir=.. \
-           file://0001-Makefile-Patch-to-use-usr-bin-env-for-Python-and-TCL.patch;patchdir=.. \
            file://0001-Makefile-Add-LDFLAGS-to-panelui-and-module_helper-li.patch;patchdir=.. \
-           file://0001-Autotools-Do-not-hard-code-executable-paths-at-compi.patch;patchdir=.. \
-           file://use-standard-sitepy.patch \
+           file://use-standard-sitepy.patch;patchdir=.. \
            "
 
+# python3targetconfig: configuration for the target machine is accessible (such as correct installation directories)
+# autotools-brokensep: autotools build process (without support for building outside of ${S})
+# pkgconfig: standard way to get header and library information by using pkg-config
 inherit autotools-brokensep pkgconfig python3native
 
 # Modify these as desired
 PV = "2.10.0~pre0+git"
-SRCREV = "8102217123f319c0fee7403f48448bd0844ccbcb"
+SRCREV = "90f51a6ba0e578fe3d559005981d06289c2ffb8c"
 
 S = "${WORKDIR}/git/src"
 
 DEPENDS += "libtirpc libusb1 glib-2.0 gtk+3 python3-yapps2-native intltool-native \
-boost boost-native python3 python3-native tcl tcl-native tk xinerama readline libglu libxmu \
+boost boost-native python3 python3-native tcl8 tcl8-native tk8 xinerama readline libglu libxmu \
 asciidoc-native groff-native" 
 # These ones were missing from configure.ac checks
 
 # tk rprovides wish, tk-lib provides libtk8.6.so
 # libgl-mesa rprovides libgl
-RDEPENDS:${PN} += "tcl tk tk-lib python3-core bash grep bwidget libgl python3-pygobject python3-pyopengl libglu"
+RDEPENDS:${PN} += "tcl8 tk8 tk8-lib python3-core bash grep bwidget libgl python3-pygobject python3-pyopengl libglu"
 
 # Include --disable-gtk here if you don't want things that depend on gtk3
-EXTRA_OECONF += "--without-libmodbus --disable-check-runtime-deps --disable-tkinter --with-boost-python=boost_python312"
+# --with-boost is critical if your host system has boost installed on it. Otherwise ax_boost_base finds that
+EXTRA_OECONF += "--without-libmodbus --disable-check-runtime-deps --disable-tkinter --with-boost-python=boost_python313 --with-boost=${RECIPE_SYSROOT}/usr"
 
 CONFIGUREOPTS:remove = "--disable-dependency-tracking"
 CONFIGUREOPTS:remove = "--disable-silent-rules"
 CONFIGUREOPTS:remove = "--with-libtool-sysroot"
 EXTRA_OECONF:remove = "--disable-static"
+
+# Workaround for outdated use of the "CONST" macro in emcsh.cc
+#CFLAGS:append = " -DCONST=const"
+
+# C compiler flags
+CFLAGS:append = " -fpermissive -Wno-implicit-function-declaration -Wall -Wextra"
+
+# C++ compiler flags
+CXXFLAGS:append = " -fpermissive -Wall -Wextra"
+
 
 # The __FILE__ or assert() macros both cause this warning to be spammed on debug builds
 # Using DEBUG_PREFIX_MAP is another option to avoid this
