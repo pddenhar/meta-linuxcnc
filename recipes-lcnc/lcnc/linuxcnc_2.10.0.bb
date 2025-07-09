@@ -1,13 +1,13 @@
 LICENSE = "GPL-2.0-only"
-LIC_FILES_CHKSUM = "file://../COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
+LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 SRC_URI = "git://github.com/LinuxCNC/linuxcnc.git;protocol=https;branch=master \
-           file://0002-configure.ac-Add-BUILD_TKINTER-flag.patch;patchdir=.. \
-           file://0001-Un-ruin-the-ridiculous-shebang-substitution-for-pyth.patch;patchdir=.. \
-           file://0001-Makefile-Add-LDFLAGS-to-panelui-and-module_helper-li.patch;patchdir=.. \
-           file://use-standard-sitepy.patch;patchdir=.. \
-           file://0005-Remove-compile-time-paths-from-.in-files.patch;patchdir=.. \
-           file://0006-Do-not-use-hardcoded-shebang-for-mesambccc.py.patch;patchdir=.. \
+           file://0002-configure.ac-Add-BUILD_TKINTER-flag.patch; \
+           file://0001-Un-ruin-the-ridiculous-shebang-substitution-for-pyth.patch; \
+           file://0001-Makefile-Add-LDFLAGS-to-panelui-and-module_helper-li.patch; \
+           file://use-standard-sitepy.patch; \
+           file://0005-Remove-compile-time-paths-from-.in-files.patch; \
+           file://0006-Do-not-use-hardcoded-shebang-for-mesambccc.py.patch; \
            "
 
 # python3targetconfig: configuration for the target machine is accessible (such as correct installation directories)
@@ -19,7 +19,20 @@ inherit autotools-brokensep pkgconfig python3native
 PV = "2.10.0~pre0+git"
 SRCREV = "90f51a6ba0e578fe3d559005981d06289c2ffb8c"
 
-S = "${WORKDIR}/git/src"
+S = "${WORKDIR}/git"
+# LinuxCNC build separation is broken, so we need to build in src
+B = "${S}/src"
+AUTOTOOLS_SCRIPT_PATH = "${B}"
+
+# We need to replace autotools_preconfigure with our own, because it deletes ${B} otherwise
+autotools_preconfigure() {
+	if [ -n "${CONFIGURESTAMPFILE}" -a -e "${CONFIGURESTAMPFILE}" ]; then
+		if [ "`cat ${CONFIGURESTAMPFILE}`" != "${BB_TASKHASH}" ]; then
+            find ${S} -ignore_readdir_race -name \*.la -delete
+        fi
+	fi
+}
+
 
 DEPENDS += "libtirpc libusb1 glib-2.0 gtk+3 python3-yapps2-native intltool-native \
 boost boost-native python3 python3-native tcl8 tcl8-native tk8 xinerama readline libglu libxmu \
