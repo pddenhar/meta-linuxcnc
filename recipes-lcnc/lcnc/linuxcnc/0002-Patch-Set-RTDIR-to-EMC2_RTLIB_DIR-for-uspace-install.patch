@@ -1,0 +1,24 @@
+From d2521c344c60729cbb4f6d353862ce493691d261 Mon Sep 17 00:00:00 2001
+From: Peter Den Hartog <pddenhar@gmail.com>
+Date: Wed, 9 Jul 2025 10:14:55 -0700
+Subject: [PATCH] Patch: Set RTDIR to EMC2_RTLIB_DIR for uspace installations
+ since the source folder (default value) will never be present after cross
+ compiling.
+
+---
+ src/configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/configure.ac b/src/configure.ac
+index 2a65e7a39d..6106b77db7 100644
+--- a/src/configure.ac
++++ b/src/configure.ac
+@@ -328,7 +328,7 @@ case $RTS in
+ ;;
+ uspace|uspace+*)
+     RTPREFIX=uspace
+-    RTDIR=$(pwd -P)
++    RTDIR="$(EMC2_RTLIB_DIR)"
+     ULAPI_CFLAGS=""
+     RTFLAGS="-DUSPACE"
+     BUILD_SYS=uspace

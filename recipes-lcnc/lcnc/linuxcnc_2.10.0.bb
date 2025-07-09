@@ -8,6 +8,8 @@ SRC_URI = "git://github.com/LinuxCNC/linuxcnc.git;protocol=https;branch=master \
            file://use-standard-sitepy.patch; \
            file://0005-Remove-compile-time-paths-from-.in-files.patch; \
            file://0006-Do-not-use-hardcoded-shebang-for-mesambccc.py.patch; \
+           file://0002-Patch-Set-RTDIR-to-EMC2_RTLIB_DIR-for-uspace-install.patch \
+           file://0001-Patch-Change-all-tclsh-shebangs-to-tclsh8-to-match-O.patch \
            "
 
 # python3targetconfig: configuration for the target machine is accessible (such as correct installation directories)
@@ -22,9 +24,14 @@ SRCREV = "90f51a6ba0e578fe3d559005981d06289c2ffb8c"
 S = "${WORKDIR}/git"
 # LinuxCNC build separation is broken, so we need to build in src
 B = "${S}/src"
+
+#######################################################
+# autotools fixes
+#######################################################
 AUTOTOOLS_SCRIPT_PATH = "${B}"
 
 # We need to replace autotools_preconfigure with our own, because it deletes ${B} otherwise
+# since S != B in our case (but B is still *inside* S)
 autotools_preconfigure() {
 	if [ -n "${CONFIGURESTAMPFILE}" -a -e "${CONFIGURESTAMPFILE}" ]; then
 		if [ "`cat ${CONFIGURESTAMPFILE}`" != "${BB_TASKHASH}" ]; then
@@ -33,11 +40,9 @@ autotools_preconfigure() {
 	fi
 }
 
-
 DEPENDS += "libtirpc libusb1 glib-2.0 gtk+3 python3-yapps2-native intltool-native \
 boost boost-native python3 python3-native tcl8 tcl8-native tk8 xinerama readline libglu libxmu \
 asciidoc-native groff-native" 
-# These ones were missing from configure.ac checks
 
 # tk rprovides wish, tk-lib provides libtk8.6.so
 # libgl-mesa rprovides libgl
@@ -52,15 +57,10 @@ CONFIGUREOPTS:remove = "--disable-silent-rules"
 CONFIGUREOPTS:remove = "--with-libtool-sysroot"
 EXTRA_OECONF:remove = "--disable-static"
 
-# Workaround for outdated use of the "CONST" macro in emcsh.cc
-#CFLAGS:append = " -DCONST=const"
-
-# C compiler flags
+# C compiler flags to make us work with GCC-14
 CFLAGS:append = " -fpermissive -Wno-implicit-function-declaration -Wall -Wextra"
-
 # C++ compiler flags
 CXXFLAGS:append = " -fpermissive -Wall -Wextra"
-
 
 # The __FILE__ or assert() macros both cause this warning to be spammed on debug builds
 # Using DEBUG_PREFIX_MAP is another option to avoid this

@@ -1,0 +1,185 @@
+From 6c03aa7d38d71b9ce059436bfce0518f09cd213e Mon Sep 17 00:00:00 2001
+From: Peter Den Hartog <pddenhar@gmail.com>
+Date: Wed, 9 Jul 2025 10:04:40 -0700
+Subject: [PATCH] Patch: Change all tclsh shebangs to tclsh8 (to match OE
+ recipe)
+
+---
+ configs/sim/axis/db_demo/db_editor.tcl                 | 2 +-
+ configs/sim/axis/external_offsets/eoffsets_monitor.tcl | 2 +-
+ configs/sim/axis/extrajoints/M144                      | 2 +-
+ configs/sim/axis/vismach/millturn/mcodes/M128          | 2 +-
+ configs/sim/axis/vismach/millturn/mcodes/M129          | 2 +-
+ configs/sim/axis/vismach/puma/mcodes/M128              | 2 +-
+ configs/sim/axis/vismach/puma/mcodes/M129              | 2 +-
+ configs/sim/axis/vismach/puma/mcodes/M130              | 2 +-
+ scripts/halreport                                      | 2 +-
+ scripts/latency-histogram                              | 2 +-
+ scripts/monitor-xhc-hb04                               | 2 +-
+ scripts/moveoff_gui                                    | 2 +-
+ tcl/ngcgui_app.tcl                                     | 2 +-
+ tcl/ngcgui_ttt.tcl                                     | 2 +-
+ tcl/show_errors.tcl                                    | 2 +-
+ tcl/twopass.tcl                                        | 2 +-
+ 16 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/configs/sim/axis/db_demo/db_editor.tcl b/configs/sim/axis/db_demo/db_editor.tcl
+index 3c88b0af75..fcff9cb523 100755
+--- a/configs/sim/axis/db_demo/db_editor.tcl
++++ b/configs/sim/axis/db_demo/db_editor.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ package require Tk
+ wm withdraw .
+ tk_messageBox \
+diff --git a/configs/sim/axis/external_offsets/eoffsets_monitor.tcl b/configs/sim/axis/external_offsets/eoffsets_monitor.tcl
+index b0a72d13f6..641b20a9db 100755
+--- a/configs/sim/axis/external_offsets/eoffsets_monitor.tcl
++++ b/configs/sim/axis/external_offsets/eoffsets_monitor.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # script to ensure e:[xyz]counts are zero if machine off
+ 
+ package require Hal
+diff --git a/configs/sim/axis/extrajoints/M144 b/configs/sim/axis/extrajoints/M144
+index d58daeaf90..2659a53c2a 100755
+--- a/configs/sim/axis/extrajoints/M144
++++ b/configs/sim/axis/extrajoints/M144
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ 
+ # M144 demo for extra joints 
+ # Usage: M144 [Pjoint_num] [Qposition]
+diff --git a/configs/sim/axis/vismach/millturn/mcodes/M128 b/configs/sim/axis/vismach/millturn/mcodes/M128
+index 41f3ba5216..299633c21b 100755
+--- a/configs/sim/axis/vismach/millturn/mcodes/M128
++++ b/configs/sim/axis/vismach/millturn/mcodes/M128
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # change axis limits to MILL limits
+ set switchkins_pin 3     ;# agree with inifile
+ set coords "x y z"       ;# agree with inifile
+diff --git a/configs/sim/axis/vismach/millturn/mcodes/M129 b/configs/sim/axis/vismach/millturn/mcodes/M129
+index 9613556c94..8f012a74ff 100755
+--- a/configs/sim/axis/vismach/millturn/mcodes/M129
++++ b/configs/sim/axis/vismach/millturn/mcodes/M129
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # change axis limits to TURN limits
+ set switchkins_pin 3     ;# agree with inifile
+ set coords "x y z"       ;# axis declared must provide MIN_LIMIT_TURN and MAX_LIMIT_TURN in inifile
+diff --git a/configs/sim/axis/vismach/puma/mcodes/M128 b/configs/sim/axis/vismach/puma/mcodes/M128
+index 9f2f6d5369..35c9e9148a 100755
+--- a/configs/sim/axis/vismach/puma/mcodes/M128
++++ b/configs/sim/axis/vismach/puma/mcodes/M128
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # Restore axis limits to INI settings
+ set kinstype       0     ;# 0: DEFAUlT kins type
+ set switchkins_pin 3     ;# agree with inifile
+diff --git a/configs/sim/axis/vismach/puma/mcodes/M129 b/configs/sim/axis/vismach/puma/mcodes/M129
+index 023bd2b0a8..0c861d3cb3 100755
+--- a/configs/sim/axis/vismach/puma/mcodes/M129
++++ b/configs/sim/axis/vismach/puma/mcodes/M129
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # switch kinematics and change axis limits to equiv joint limits
+ set kinstype       1     ;# 1: IDENTITY kins
+ set switchkins_pin 3     ;# agree with inifile
+diff --git a/configs/sim/axis/vismach/puma/mcodes/M130 b/configs/sim/axis/vismach/puma/mcodes/M130
+index d4db6c153f..f52b72ed10 100755
+--- a/configs/sim/axis/vismach/puma/mcodes/M130
++++ b/configs/sim/axis/vismach/puma/mcodes/M130
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # switch kinematics and change axis limits
+ set kinstype       2     ;# 2: TYPE 2 kins
+ set switchkins_pin 3     ;# agree with inifile
+diff --git a/scripts/halreport b/scripts/halreport
+index c7d516f807..8108a063ff 100755
+--- a/scripts/halreport
++++ b/scripts/halreport
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ 
+ #-----------------------------------------------------------------------
+ # Copyright: 2018
+diff --git a/scripts/latency-histogram b/scripts/latency-histogram
+index fb85a36c2c..cc9ded0867 100755
+--- a/scripts/latency-histogram
++++ b/scripts/latency-histogram
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ #
+ 
+ # for Usage:
+diff --git a/scripts/monitor-xhc-hb04 b/scripts/monitor-xhc-hb04
+index c0cfc7d843..d60439c9dc 100755
+--- a/scripts/monitor-xhc-hb04
++++ b/scripts/monitor-xhc-hb04
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ 
+ #-----------------------------------------------------------------------
+ # Copyright: 2014
+diff --git a/scripts/moveoff_gui b/scripts/moveoff_gui
+index bdced496fe..31baf92c55 100755
+--- a/scripts/moveoff_gui
++++ b/scripts/moveoff_gui
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ 
+ # library procs
+ # Note: use linuxcnc_var script since this program can be
+diff --git a/tcl/ngcgui_app.tcl b/tcl/ngcgui_app.tcl
+index e397988827..aa9cb4ff15 100644
+--- a/tcl/ngcgui_app.tcl
++++ b/tcl/ngcgui_app.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # read ini items, source ngcgui.tcl, create axis tabs
+ # provide tcl package Ngcgui
+ 
+diff --git a/tcl/ngcgui_ttt.tcl b/tcl/ngcgui_ttt.tcl
+index 0341a377d5..2890567d46 100644
+--- a/tcl/ngcgui_ttt.tcl
++++ b/tcl/ngcgui_ttt.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # ngcgui_ttt.tcl: a LinuxCNC [DISPLAY]TKAPP for using truetype-tracer and ngcgui
+ 
+ #-----------------------------------------------------------------------
+diff --git a/tcl/show_errors.tcl b/tcl/show_errors.tcl
+index abed5323f9..cafc546114 100644
+--- a/tcl/show_errors.tcl
++++ b/tcl/show_errors.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ #    This is a part of LinuxCNC
+ #    Copyright 2006-2009 Jeff Epler <jepler@unpythonic.net>
+ #
+diff --git a/tcl/twopass.tcl b/tcl/twopass.tcl
+index 1614a607a3..f46acd44c1 100644
+--- a/tcl/twopass.tcl
++++ b/tcl/twopass.tcl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/tclsh
++#!/usr/bin/tclsh8
+ # twopass.tcl:
+ #
+ # This file is sourced by haltcl when the inifile item HAL:TWOPASS
