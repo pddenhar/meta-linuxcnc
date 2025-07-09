@@ -6,6 +6,8 @@ SRC_URI = "git://github.com/LinuxCNC/linuxcnc.git;protocol=https;branch=master \
            file://0001-Un-ruin-the-ridiculous-shebang-substitution-for-pyth.patch;patchdir=.. \
            file://0001-Makefile-Add-LDFLAGS-to-panelui-and-module_helper-li.patch;patchdir=.. \
            file://use-standard-sitepy.patch;patchdir=.. \
+           file://0005-Remove-compile-time-paths-from-.in-files.patch;patchdir=.. \
+           file://0006-Do-not-use-hardcoded-shebang-for-mesambccc.py.patch;patchdir=.. \
            "
 
 # python3targetconfig: configuration for the target machine is accessible (such as correct installation directories)

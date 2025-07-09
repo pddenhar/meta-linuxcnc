@@ -1,4 +1,4 @@
-From 1929c0a982ece5f61e51be0eae39d5ae2bd55820 Mon Sep 17 00:00:00 2001
+From fc2c8a29df6c1c4eb2607853091aae1f2a8f25f3 Mon Sep 17 00:00:00 2001
 From: Peter Den Hartog <pdenhartog@tormach.com>
 Date: Fri, 25 Oct 2024 00:23:29 -0600
 Subject: [PATCH] configure.ac: Add BUILD_TKINTER flag
