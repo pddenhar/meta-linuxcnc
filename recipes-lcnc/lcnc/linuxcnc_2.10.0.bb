@@ -46,7 +46,8 @@ asciidoc-native groff-native"
 
 # tk rprovides wish, tk-lib provides libtk8.6.so
 # libgl-mesa rprovides libgl
-RDEPENDS:${PN} += "tcl8 tk8 tk8-lib python3-core bash grep bwidget libgl python3-pygobject python3-pyopengl libglu"
+RDEPENDS:${PN} += "tcl8 tk8 tk8-lib python3-core bash grep bwidget libgl python3-pygobject \
+    python3-pyopengl python3-tkinter libglu"
 
 # Include --disable-gtk here if you don't want things that depend on gtk3
 # --with-boost is critical if your host system has boost installed on it. Otherwise ax_boost_base finds that
